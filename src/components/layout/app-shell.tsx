@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StoreHydrationGate } from "@/components/providers/store-hydration-gate";
+import { PwaInstallBanner } from "@/components/layout/pwa-install-banner";
 
 const navItems = [
   { href: "/", label: "หน้าหลัก", shortLabel: "หลัก", icon: Home },
@@ -28,7 +29,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <StoreHydrationGate>
       <div className="flex min-h-screen flex-col bg-background">
-        <header className="sticky top-0 z-40 border-b border-primary/30 bg-foreground text-background shadow-md">
+        <PwaInstallBanner />
+        <header className="sticky top-0 z-40 border-b border-primary/30 bg-foreground pt-[env(safe-area-inset-top)] text-background shadow-md">
           <div className="mx-auto flex h-16 max-w-lg items-center justify-between px-4 sm:px-5">
             <Link
               href="/"

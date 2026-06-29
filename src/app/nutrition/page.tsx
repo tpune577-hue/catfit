@@ -8,6 +8,10 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/layout/page-header";
 import { Section } from "@/components/layout/section";
 import { MacroRing } from "@/components/nutrition/macro-ring";
+import {
+  ManualMealSheet,
+  type ManualMealInput,
+} from "@/components/nutrition/manual-meal-sheet";
 import { useNutritionStore } from "@/stores/nutrition-store";
 import { useProfileStore } from "@/stores/profile-store";
 import { sumMeals, getMealWarnings } from "@/lib/nutrition";
@@ -57,6 +61,21 @@ export default function NutritionPage() {
     }
   };
 
+  const addManualMeal = (data: ManualMealInput) => {
+    addMeal({
+      id: crypto.randomUUID(),
+      name: data.name,
+      mealType: data.mealType,
+      servings: 1,
+      calories: data.calories,
+      protein: data.protein,
+      fat: data.fat,
+      carbs: data.carbs,
+      tags: [],
+      date: today,
+    });
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -94,6 +113,7 @@ export default function NutritionPage() {
                   <p className="text-base font-medium">{m.name}</p>
                   <p className="text-sm text-muted-foreground">
                     {MEAL_LABELS[m.mealType]} · {m.calories} kcal
+                    {!m.foodId && " · บันทึกเอง"}
                   </p>
                 </div>
                 <Button
@@ -110,7 +130,10 @@ export default function NutritionPage() {
         )}
       </Section>
 
-      <Section title="เพิ่มอาหาร">
+      <Section
+        title="เพิ่มอาหาร"
+        action={<ManualMealSheet mealType={mealType} onSubmit={addManualMeal} />}
+      >
         <div className="flex flex-wrap gap-2">
         {(Object.keys(MEAL_LABELS) as MealType[]).map((t) => (
           <Button
