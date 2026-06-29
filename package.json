@@ -9,7 +9,8 @@
     "lint": "eslint",
     "import-exercises": "curl -fsSL -o src/data/exercises.json https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/data/exercises.json",
     "generate-thai-steps": "node scripts/generate-thai-steps.mjs",
-    "build-thai-steps": "tsx scripts/build-thai-steps-offline.mjs"
+    "build-thai-steps": "tsx scripts/build-thai-steps-offline.mjs",
+    "generate-pwa-icons": "node scripts/generate-pwa-icons.mjs"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
@@ -38,6 +39,7 @@
     "@vitalets/google-translate-api": "^9.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "tsx": "^4.22.4",
     "typescript": "^5"

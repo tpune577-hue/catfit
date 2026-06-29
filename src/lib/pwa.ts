@@ -29,6 +29,25 @@ export function isIosDevice() {
   );
 }
 
+export async function getServiceWorkerStatus(): Promise<
+  "active" | "installing" | "none" | "unsupported"
+> {
+  if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
+    return "unsupported";
+  }
+
+  const registration = await navigator.serviceWorker.getRegistration("/");
+  if (!registration) return "none";
+  if (registration.active) return "active";
+  if (registration.installing || registration.waiting) return "installing";
+  return "none";
+}
+
+export function isAndroidDevice() {
+  if (typeof window === "undefined") return false;
+  return /Android/i.test(window.navigator.userAgent);
+}
+
 export function isIosChrome() {
   if (!isIosDevice()) return false;
   return /CriOS/.test(window.navigator.userAgent);
