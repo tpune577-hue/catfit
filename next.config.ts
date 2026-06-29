@@ -18,4 +18,9 @@ export default withPWA({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
   register: true,
+  scope: "/",
+  sw: "/sw.js",
+  cacheStartUrl: true,
+  dynamicStartUrl: true,
+  dynamicStartUrlRedirect: "/onboarding",
 })(nextConfig);
