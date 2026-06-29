@@ -7,18 +7,25 @@ import { Button } from "@/components/ui/button";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useStoreHydration } from "@/components/providers/store-hydration-gate";
 
 const DAY_NAMES = ["จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์", "เสาร์", "อาทิตย์"];
 
 export default function WorkoutPage() {
   const router = useRouter();
+  const hydrated = useStoreHydration();
   const weeklyPlan = useWorkoutStore((s) => s.weeklyPlan);
 
   useEffect(() => {
+    if (!hydrated) return;
     if (!weeklyPlan) router.replace("/onboarding");
-  }, [weeklyPlan, router]);
+  }, [hydrated, weeklyPlan, router]);
 
-  if (!weeklyPlan) return null;
+  if (!hydrated || !weeklyPlan) {
+    return (
+      <p className="py-12 text-center text-muted-foreground">กำลังโหลด...</p>
+    );
+  }
 
   return (
     <div className="space-y-6">
