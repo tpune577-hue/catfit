@@ -48,7 +48,15 @@ export default function SettingsPage() {
           <CardTitle className="text-base">PWA</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm text-muted-foreground">
-          <p>ติดตั้งแอป: กด Share → Add to Home Screen บน iOS หรือ Install บน Android</p>
+          <p>
+            <strong className="text-foreground">Android (Chrome):</strong> เมนู
+            ⋮ → Install app หรือ Add to Home screen แล้วเปิดจากไอคอนบนหน้าจอ
+            (ไม่ใช่แท็บ Chrome) จะไม่มีแถบ URL
+          </p>
+          <p>
+            <strong className="text-foreground">iPhone (Safari):</strong> Share →
+            Add to Home Screen แล้วเปิดจากไอคอน CatFit
+          </p>
           <p>
             ข้อมูลทั้งหมดเก็บบนเครื่องนี้ (localStorage) ไม่ต้องสมัครบัญชี
             แต่จะไม่ sync ข้ามเครื่องหรือเบราว์เซอร์
