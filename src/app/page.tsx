@@ -1,65 +1,153 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Activity, Flame, ChevronRight, Library } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { FindingCards } from "@/components/health/finding-badge";
+import { PageHeader } from "@/components/layout/page-header";
+import { StatTile } from "@/components/layout/stat-tile";
+import { Section } from "@/components/layout/section";
+import { useProfileStore } from "@/stores/profile-store";
+import { useHealthStore } from "@/stores/health-store";
+import { useWorkoutStore } from "@/stores/workout-store";
+import { useNutritionStore } from "@/stores/nutrition-store";
+import { sumMeals } from "@/lib/nutrition";
+import { format } from "date-fns";
+
+export default function DashboardPage() {
+  const router = useRouter();
+  const profile = useProfileStore((s) => s.profile);
+  const latestAnalysis = useHealthStore((s) => s.latestAnalysis);
+  const weeklyPlan = useWorkoutStore((s) => s.weeklyPlan);
+  const { targets, getMealsForDate } = useNutritionStore();
+  const today = format(new Date(), "yyyy-MM-dd");
+  const todayMeals = getMealsForDate(today);
+  const todayTotals = sumMeals(todayMeals);
+
+  useEffect(() => {
+    if (!profile?.onboardingComplete) {
+      router.replace("/onboarding");
+    }
+  }, [profile, router]);
+
+  if (!profile?.onboardingComplete) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center">
+        <p className="text-muted-foreground">กำลังโหลด...</p>
+      </div>
+    );
+  }
+
+  const todayIndex = new Date().getDay();
+  const planDayIndex = todayIndex === 0 ? 6 : todayIndex - 1;
+  const todayWorkout = weeklyPlan?.days[planDayIndex % (weeklyPlan?.days.length ?? 1)];
+
+  const calPct = targets
+    ? Math.min(100, (todayTotals.calories / targets.calories) * 100)
+    : 0;
+
+  const issues = latestAnalysis?.findings.filter(
+    (f) => f.severity !== "normal"
+  ) ?? [];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="space-y-6">
+      <PageHeader
+        title={`สวัสดี${profile.name ? `, ${profile.name}` : ""}`}
+        description={
+          latestAnalysis?.summary ?? "ติดตามสุขภาพและออกกำลังกายของคุณ"
+        }
+      />
+
+      <p className="rounded-xl border border-border/60 bg-muted/50 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+        แอปนี้ช่วยจัดการไลฟ์สไตล์ ไม่ใช่คำแนะนำทางการแพทย์
+      </p>
+
+      {issues.length > 0 && (
+        <Section
+          title="ปัญหาที่ต้องแก้"
+          description="จากรายงานสุขภาพล่าสุด"
+          action={
+            issues.length > 3 ? (
+              <Link
+                href="/health"
+                className="shrink-0 text-sm font-medium text-primary"
+              >
+                ดูทั้งหมด
+              </Link>
+            ) : undefined
+          }
+        >
+          <FindingCards findings={issues.slice(0, 3)} />
+        </Section>
+      )}
+
+      <div className="grid grid-cols-2 gap-3">
+        <StatTile
+          label="แคลอรี่วันนี้"
+          value={Math.round(todayTotals.calories)}
+          unit={`/ ${targets?.calories ?? "—"} kcal`}
+          icon={Flame}
+        >
+          <Progress value={calPct} className="mt-3 h-2" />
+        </StatTile>
+
+        <StatTile
+          label="น้ำหนักปัจจุบัน"
+          value={profile.weight}
+          unit="kg"
+          sub={
+            profile.targetWeight
+              ? `เป้าหมาย ${profile.targetWeight} kg`
+              : undefined
+          }
+          icon={Activity}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+      </div>
+
+      {todayWorkout && (
+        <Section title={`วันนี้ · ${todayWorkout.name}`}>
+          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
+            <p className="text-base text-foreground/90">
+              {todayWorkout.exercises.length} ท่า
+              {todayWorkout.cardioBlock &&
+                ` · ${todayWorkout.cardioBlock.label}`}
+            </p>
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+              <Link href={`/workout/${todayWorkout.id}`} className="flex-1">
+                <Button className="h-11 w-full text-base" size="lg">
+                  เริ่มออกกำลังกาย
+                  <ChevronRight className="ml-1 h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/exercises" className="sm:w-auto">
+                <Button variant="outline" className="h-11 w-full gap-2 sm:w-auto">
+                  <Library className="h-4 w-4" />
+                  คลังท่า
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </Section>
+      )}
+
+      <Section title="บันทึกด่วน">
+        <div className="grid grid-cols-2 gap-3">
+          <Link href="/nutrition">
+            <Button variant="outline" className="h-12 w-full text-base">
+              บันทึกอาหาร
+            </Button>
+          </Link>
+          <Link href="/body">
+            <Button variant="outline" className="h-12 w-full text-base">
+              บันทึกน้ำหนัก
+            </Button>
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </Section>
     </div>
   );
 }
