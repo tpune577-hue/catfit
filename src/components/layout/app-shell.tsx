@@ -11,6 +11,7 @@ import {
   Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { StoreHydrationGate } from "@/components/providers/store-hydration-gate";
 
 const navItems = [
   { href: "/", label: "หน้าหลัก", shortLabel: "หลัก", icon: Home },
@@ -25,7 +26,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const hideNav = pathname.startsWith("/onboarding");
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <StoreHydrationGate>
+      <div className="flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-40 border-b border-primary/25 bg-foreground text-background shadow-md">
         <div className="mx-auto flex h-14 max-w-lg items-center justify-between px-4 sm:px-5">
           <Link
@@ -89,6 +91,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </nav>
       )}
-    </div>
+      </div>
+    </StoreHydrationGate>
   );
 }

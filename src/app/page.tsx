@@ -10,6 +10,7 @@ import { FindingCards } from "@/components/health/finding-badge";
 import { PageHeader } from "@/components/layout/page-header";
 import { StatTile } from "@/components/layout/stat-tile";
 import { Section } from "@/components/layout/section";
+import { useStoreHydration } from "@/components/providers/store-hydration-gate";
 import { useProfileStore } from "@/stores/profile-store";
 import { useHealthStore } from "@/stores/health-store";
 import { useWorkoutStore } from "@/stores/workout-store";
@@ -19,6 +20,7 @@ import { format } from "date-fns";
 
 export default function DashboardPage() {
   const router = useRouter();
+  const hydrated = useStoreHydration();
   const profile = useProfileStore((s) => s.profile);
   const latestAnalysis = useHealthStore((s) => s.latestAnalysis);
   const weeklyPlan = useWorkoutStore((s) => s.weeklyPlan);
@@ -28,12 +30,13 @@ export default function DashboardPage() {
   const todayTotals = sumMeals(todayMeals);
 
   useEffect(() => {
+    if (!hydrated) return;
     if (!profile?.onboardingComplete) {
       router.replace("/onboarding");
     }
-  }, [profile, router]);
+  }, [hydrated, profile, router]);
 
-  if (!profile?.onboardingComplete) {
+  if (!hydrated || !profile?.onboardingComplete) {
     return (
       <div className="flex min-h-[50vh] items-center justify-center">
         <p className="text-muted-foreground">กำลังโหลด...</p>

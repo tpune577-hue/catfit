@@ -47,8 +47,12 @@ export default function SettingsPage() {
         <CardHeader className="pb-2">
           <CardTitle className="text-base">PWA</CardTitle>
         </CardHeader>
-        <CardContent className="text-sm text-muted-foreground">
+        <CardContent className="space-y-2 text-sm text-muted-foreground">
           <p>ติดตั้งแอป: กด Share → Add to Home Screen บน iOS หรือ Install บน Android</p>
+          <p>
+            ข้อมูลทั้งหมดเก็บบนเครื่องนี้ (localStorage) ไม่ต้องสมัครบัญชี
+            แต่จะไม่ sync ข้ามเครื่องหรือเบราว์เซอร์
+          </p>
         </CardContent>
       </Card>
 
