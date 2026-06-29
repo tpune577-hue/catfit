@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Home,
@@ -37,12 +38,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               href="/"
               className="flex items-center gap-2.5 text-xl font-bold tracking-tight"
             >
-              <span
-                className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-base font-black text-primary-foreground"
-                aria-hidden
-              >
-                C
-              </span>
+              <Image
+                src="/catfit-logo.png"
+                alt="CatFit"
+                width={36}
+                height={36}
+                className="rounded-lg"
+                priority
+              />
               <span className="text-primary">CatFit</span>
             </Link>
             <Link
