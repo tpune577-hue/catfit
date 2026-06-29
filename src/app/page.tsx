@@ -27,10 +27,17 @@ export default function DashboardPage() {
   const profile = useProfileStore((s) => s.profile);
   const latestAnalysis = useHealthStore((s) => s.latestAnalysis);
   const weeklyPlan = useWorkoutStore((s) => s.weeklyPlan);
+  const sessions = useWorkoutStore((s) => s.sessions);
   const { targets, getMealsForDate } = useNutritionStore();
   const today = format(new Date(), "yyyy-MM-dd");
   const todayMeals = getMealsForDate(today);
   const todayTotals = sumMeals(todayMeals);
+
+  // compute today's plan day before any early return so hooks stay in order
+  const todayIndex = new Date().getDay();
+  const planDayIndex = todayIndex === 0 ? 6 : todayIndex - 1;
+  const todayWorkout = weeklyPlan?.days[planDayIndex % (weeklyPlan?.days.length ?? 1)];
+  const todayDone = useTodayWorkoutDone(todayWorkout?.id);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -46,13 +53,6 @@ export default function DashboardPage() {
       </div>
     );
   }
-
-  const sessions = useWorkoutStore((s) => s.sessions);
-  const todayIndex = new Date().getDay();
-  const planDayIndex = todayIndex === 0 ? 6 : todayIndex - 1;
-  const todayWorkout = weeklyPlan?.days[planDayIndex % (weeklyPlan?.days.length ?? 1)];
-
-  const todayDone = useTodayWorkoutDone(todayWorkout?.id);
 
   // count consecutive completed workout days this week for the achievement streak
   const weekStreak = (() => {
