@@ -12,13 +12,14 @@ import { StatTile } from "@/components/layout/stat-tile";
 import { Section } from "@/components/layout/section";
 import { DailyStreakDots } from "@/components/workout/daily-streak-dots";
 import { CatWorkoutWidget } from "@/components/workout/cat-workout-widget";
+import { WorkoutAchievementCard, useTodayWorkoutDone } from "@/components/workout/workout-achievement-card";
 import { useStoreHydration } from "@/components/providers/store-hydration-gate";
 import { useProfileStore } from "@/stores/profile-store";
 import { useHealthStore } from "@/stores/health-store";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { useNutritionStore } from "@/stores/nutrition-store";
 import { sumMeals } from "@/lib/nutrition";
-import { format } from "date-fns";
+import { format, startOfWeek, isSameDay, parseISO } from "date-fns";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -46,9 +47,36 @@ export default function DashboardPage() {
     );
   }
 
+  const sessions = useWorkoutStore((s) => s.sessions);
   const todayIndex = new Date().getDay();
   const planDayIndex = todayIndex === 0 ? 6 : todayIndex - 1;
   const todayWorkout = weeklyPlan?.days[planDayIndex % (weeklyPlan?.days.length ?? 1)];
+
+  const todayDone = useTodayWorkoutDone(todayWorkout?.id);
+
+  // count consecutive completed workout days this week for the achievement streak
+  const weekStreak = (() => {
+    if (!weeklyPlan) return 0;
+    const now = new Date();
+    const weekStart = startOfWeek(now, { weekStartsOn: 1 });
+    let count = 0;
+    const todayDayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
+    for (let i = todayDayIdx; i >= 0; i--) {
+      const plan = weeklyPlan.days.find((d) => d.dayIndex === i);
+      if (!plan) continue;
+      const dateForDay = new Date(weekStart);
+      dateForDay.setDate(weekStart.getDate() + i);
+      const done = sessions.some(
+        (s) =>
+          s.dayId === plan.id &&
+          s.completedAt &&
+          isSameDay(parseISO(s.completedAt), dateForDay)
+      );
+      if (done) count++;
+      else if (i < todayDayIdx) break;
+    }
+    return count;
+  })();
 
   const calPct = targets
     ? Math.min(100, (todayTotals.calories / targets.calories) * 100)
@@ -67,7 +95,15 @@ export default function DashboardPage() {
         }
       />
 
-      <CatWorkoutWidget />
+      {todayDone && todayWorkout ? (
+        <WorkoutAchievementCard
+          todayDayId={todayWorkout.id}
+          todayWorkoutName={todayWorkout.name}
+          streak={weekStreak}
+        />
+      ) : (
+        <CatWorkoutWidget />
+      )}
 
       <DailyStreakDots />
 
