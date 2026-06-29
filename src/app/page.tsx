@@ -68,10 +68,6 @@ export default function DashboardPage() {
 
       <DailyStreakDots />
 
-      <p className="rounded-xl border border-primary/30 bg-secondary px-4 py-3 text-sm leading-relaxed text-foreground/80">
-        แอปนี้ช่วยจัดการไลฟ์สไตล์ ไม่ใช่คำแนะนำทางการแพทย์
-      </p>
-
       {issues.length > 0 && (
         <Section
           title="ปัญหาที่ต้องแก้"
@@ -157,6 +153,10 @@ export default function DashboardPage() {
           </Link>
         </div>
       </Section>
+
+      <p className="rounded-xl border border-primary/30 bg-secondary px-4 py-3 text-sm leading-relaxed text-foreground/80">
+        แอปนี้ช่วยจัดการไลฟ์สไตล์ ไม่ใช่คำแนะนำทางการแพทย์
+      </p>
     </div>
   );
 }
