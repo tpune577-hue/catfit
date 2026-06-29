@@ -13,6 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import { StoreHydrationGate } from "@/components/providers/store-hydration-gate";
 import { PwaInstallBanner } from "@/components/layout/pwa-install-banner";
+import { PwaBrowserModeWarning } from "@/components/layout/pwa-browser-mode-warning";
 
 const navItems = [
   { href: "/", label: "หน้าหลัก", shortLabel: "หลัก", icon: Home },
@@ -93,6 +94,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </nav>
         )}
+        {!hideNav && <PwaBrowserModeWarning />}
       </div>
     </StoreHydrationGate>
   );

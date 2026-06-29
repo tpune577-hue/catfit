@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { AppShell } from "@/components/layout/app-shell";
+import { RegisterPwa } from "@/components/providers/register-pwa";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -49,6 +50,7 @@ export default function RootLayout({
   return (
     <html lang="th" className={`${geist.variable} h-full`}>
       <body className="min-h-full font-sans antialiased">
+        <RegisterPwa />
         <AppShell>{children}</AppShell>
       </body>
     </html>
