@@ -8,6 +8,7 @@ import { useWorkoutStore } from "@/stores/workout-store";
 import { useNutritionStore } from "@/stores/nutrition-store";
 import { useBodyMetricsStore } from "@/stores/body-metrics-store";
 import { useRouter } from "next/navigation";
+import { PwaStatusCard } from "@/components/layout/pwa-status-card";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -47,19 +48,23 @@ export default function SettingsPage() {
         <CardHeader className="pb-2">
           <CardTitle className="text-base">PWA</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2 text-sm text-muted-foreground">
+        <CardContent className="space-y-3 text-sm text-muted-foreground">
+          <PwaStatusCard />
           <p>
             <strong className="text-foreground">Android (Chrome):</strong> เมนู
-            ⋮ → Install app หรือ Add to Home screen แล้วเปิดจากไอคอนบนหน้าจอ
-            (ไม่ใช่แท็บ Chrome) จะไม่มีแถบ URL
+            ⋮ → <strong className="text-foreground">Install app</strong> (ไม่ใช่
+            shortcut) แล้วเปิดจากไอคอนบนหน้าจอ
           </p>
           <p>
-            <strong className="text-foreground">iPhone (Safari):</strong> Share →
-            Add to Home Screen แล้วเปิดจากไอคอน CatFit
+            <strong className="text-foreground">iPhone:</strong> ใช้{" "}
+            <strong className="text-foreground">Safari</strong> เท่านั้น → Share
+            → Add to Home Screen (Chrome บน iOS ไม่รองรับแอปเต็มจอ)
+          </p>
+          <p>
+            หลังอัปเดตแอป: ลบไอคอนเก่าออก แล้วติดตั้งใหม่ 1 ครั้ง
           </p>
           <p>
             ข้อมูลทั้งหมดเก็บบนเครื่องนี้ (localStorage) ไม่ต้องสมัครบัญชี
-            แต่จะไม่ sync ข้ามเครื่องหรือเบราว์เซอร์
           </p>
         </CardContent>
       </Card>

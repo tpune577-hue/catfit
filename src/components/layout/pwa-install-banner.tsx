@@ -3,37 +3,35 @@
 import { useEffect, useState } from "react";
 import { Download, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  getPwaDisplayMode,
+  isInstalledPwa,
+  isIosChrome,
+  isIosDevice,
+} from "@/lib/pwa";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-function isStandaloneMode() {
-  if (typeof window === "undefined") return false;
-  return (
-    window.matchMedia("(display-mode: standalone)").matches ||
-    window.matchMedia("(display-mode: fullscreen)").matches ||
-    (window.navigator as Navigator & { standalone?: boolean }).standalone ===
-      true
-  );
-}
-
 export function PwaInstallBanner() {
   const [visible, setVisible] = useState(false);
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
-  const [isIos, setIsIos] = useState(false);
+  const [displayMode, setDisplayMode] = useState<string>("browser");
+  const [ios, setIos] = useState(false);
+  const [iosChrome, setIosChrome] = useState(false);
 
   useEffect(() => {
-    if (isStandaloneMode()) return;
+    const mode = getPwaDisplayMode();
+    setDisplayMode(mode);
+    setIos(isIosDevice());
+    setIosChrome(isIosChrome());
+
+    if (isInstalledPwa()) return;
     if (sessionStorage.getItem("pwa-install-dismissed") === "1") return;
 
-    const ua = window.navigator.userAgent;
-    const ios =
-      /iPad|iPhone|iPod/.test(ua) &&
-      !(window as Window & { MSStream?: unknown }).MSStream;
-    setIsIos(ios);
     setVisible(true);
 
     const onInstallable = (e: Event) => {
@@ -58,25 +56,39 @@ export function PwaInstallBanner() {
     dismiss();
   };
 
-  if (!visible || isStandaloneMode()) return null;
+  if (!visible || isInstalledPwa()) return null;
+
+  const title =
+    displayMode === "minimal-ui"
+      ? "ยังเปิดแบบมีแถบ Chrome อยู่"
+      : "ติดตั้ง CatFit ลงเครื่อง";
+
+  let description = "เมนู Chrome (⋮) → Install app แล้วเปิดจากไอคอนบนหน้าจอ ไม่ใช่แท็บเบราว์เซอร์";
+
+  if (iosChrome) {
+    description =
+      "บน iPhone ต้องเปิดด้วย Safari แล้วกด Share → Add to Home Screen — Chrome บน iOS ไม่รองรับแอปเต็มจอ";
+  } else if (ios) {
+    description =
+      "กด Share → Add to Home Screen แล้วเปิดจากไอคอน CatFit บนหน้าจอ จะไม่มีแถบ Safari";
+  } else if (displayMode === "minimal-ui") {
+    description =
+      "ลบไอคอนเดิม แล้วติดตั้งใหม่ผ่าน Install app (ไม่ใช่ Add to Home screen แบบ shortcut)";
+  } else if (deferredPrompt) {
+    description = "กดติดตั้ง แล้วเปิดจากไอคอนหน้าจอ จะไม่มีแถบค้นหา URL";
+  }
 
   return (
     <div className="border-b border-primary/30 bg-secondary px-4 py-3">
       <div className="mx-auto flex max-w-lg items-start gap-3">
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-foreground">
-            ติดตั้ง CatFit ลงเครื่อง
-          </p>
+          <p className="text-sm font-semibold text-foreground">{title}</p>
           <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground">
-            {isIos
-              ? "กด Share แล้วเลือก Add to Home Screen จากนั้นเปิดจากไอคอนบนหน้าจอ จะไม่มีแถบ Chrome"
-              : deferredPrompt
-                ? "ติดตั้งแล้วเปิดจากไอคอนหน้าจอ จะไม่มีแถบ URL ของ Chrome"
-                : "เมนู Chrome (⋮) → Install app หรือ Add to Home screen แล้วเปิดจากไอคอน ไม่ใช่แท็บเบราว์เซอร์"}
+            {description}
           </p>
         </div>
         <div className="flex shrink-0 gap-1">
-          {deferredPrompt && (
+          {deferredPrompt && !ios && (
             <Button size="sm" className="gap-1" onClick={install}>
               <Download className="h-4 w-4" />
               ติดตั้ง
