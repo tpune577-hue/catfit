@@ -9,18 +9,18 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "FitTrack - ออกกำลังกายส่วนตัว",
+  title: "CatFit - ออกกำลังกายส่วนตัว",
   description: "วางแผนออกกำลังกาย โภชนาการ และติดตามสุขภาพ",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
-    title: "FitTrack",
+    statusBarStyle: "black-translucent",
+    title: "CatFit",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0d9488",
+  themeColor: "#141414",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,

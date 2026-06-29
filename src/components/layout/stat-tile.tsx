@@ -23,15 +23,19 @@ export function StatTile({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-border/80 bg-card p-4 shadow-sm",
+        "rounded-2xl border border-border/80 bg-card p-4 shadow-sm transition-shadow duration-200 hover:shadow-md",
         className
       )}
     >
       <div className="flex items-center gap-2 text-muted-foreground">
-        {Icon && <Icon className="h-4 w-4 shrink-0 text-primary" aria-hidden />}
+        {Icon && (
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/15">
+            <Icon className="h-4 w-4 text-foreground" aria-hidden />
+          </span>
+        )}
         <span className="text-sm font-medium">{label}</span>
       </div>
-      <p className="mt-2 text-3xl font-semibold tabular-nums tracking-tight">
+      <p className="mt-2 text-3xl font-bold tabular-nums tracking-tight">
         {value}
         {unit && (
           <span className="ml-1 text-base font-normal text-muted-foreground">

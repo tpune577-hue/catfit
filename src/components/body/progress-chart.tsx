@@ -18,7 +18,7 @@ export function ProgressChart({
   dataKey,
   label,
   unit,
-  color = "#2563eb",
+  color = "#F5C400",
 }: {
   metrics: BodyMetric[];
   dataKey: "weight" | "waist";

@@ -127,7 +127,7 @@ export default function BodyPage() {
             dataKey="waist"
             label="รอบเอว"
             unit="cm"
-            color="#0d9488"
+            color="#F5C400"
           />
         </div>
       </Section>

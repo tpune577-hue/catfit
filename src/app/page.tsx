@@ -62,7 +62,7 @@ export default function DashboardPage() {
         }
       />
 
-      <p className="rounded-xl border border-border/60 bg-muted/50 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+      <p className="rounded-xl border border-primary/30 bg-secondary px-4 py-3 text-sm leading-relaxed text-foreground/80">
         แอปนี้ช่วยจัดการไลฟ์สไตล์ ไม่ใช่คำแนะนำทางการแพทย์
       </p>
 
@@ -110,21 +110,24 @@ export default function DashboardPage() {
 
       {todayWorkout && (
         <Section title={`วันนี้ · ${todayWorkout.name}`}>
-          <div className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
-            <p className="text-base text-foreground/90">
+          <div className="rounded-2xl border-2 border-primary/40 bg-foreground p-4 text-background shadow-md">
+            <p className="text-base font-medium">
               {todayWorkout.exercises.length} ท่า
               {todayWorkout.cardioBlock &&
                 ` · ${todayWorkout.cardioBlock.label}`}
             </p>
             <div className="mt-4 flex flex-col gap-2 sm:flex-row">
               <Link href={`/workout/${todayWorkout.id}`} className="flex-1">
-                <Button className="h-11 w-full text-base" size="lg">
+                <Button className="h-11 w-full text-base font-semibold" size="lg">
                   เริ่มออกกำลังกาย
                   <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/exercises" className="sm:w-auto">
-                <Button variant="outline" className="h-11 w-full gap-2 sm:w-auto">
+                <Button
+                  variant="outline"
+                  className="h-11 w-full gap-2 border-primary/50 bg-transparent text-primary hover:bg-primary/10 sm:w-auto"
+                >
                   <Library className="h-4 w-4" />
                   คลังท่า
                 </Button>

@@ -1,11 +1,11 @@
 {
-  "name": "FitTrack - ออกกำลังกายส่วนตัว",
-  "short_name": "FitTrack",
+  "name": "CatFit - ออกกำลังกายส่วนตัว",
+  "short_name": "CatFit",
   "description": "แอปวางแผนออกกำลังกายและโภชนาการส่วนตัว",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#171717",
+  "background_color": "#fafafa",
+  "theme_color": "#141414",
   "orientation": "portrait",
   "icons": [
     {
