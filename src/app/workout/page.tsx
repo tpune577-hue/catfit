@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronRight, Library } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
+import { DailyStreakDots } from "@/components/workout/daily-streak-dots";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -41,6 +42,8 @@ export default function WorkoutPage() {
           </Link>
         }
       />
+
+      <DailyStreakDots />
 
       <div className="space-y-3">
         {weeklyPlan.days.map((day, i) => (

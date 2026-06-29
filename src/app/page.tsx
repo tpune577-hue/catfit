@@ -10,6 +10,7 @@ import { FindingCards } from "@/components/health/finding-badge";
 import { PageHeader } from "@/components/layout/page-header";
 import { StatTile } from "@/components/layout/stat-tile";
 import { Section } from "@/components/layout/section";
+import { DailyStreakDots } from "@/components/workout/daily-streak-dots";
 import { useStoreHydration } from "@/components/providers/store-hydration-gate";
 import { useProfileStore } from "@/stores/profile-store";
 import { useHealthStore } from "@/stores/health-store";
@@ -110,6 +111,8 @@ export default function DashboardPage() {
           icon={Activity}
         />
       </div>
+
+      <DailyStreakDots />
 
       {todayWorkout && (
         <Section title={`วันนี้ · ${todayWorkout.name}`}>
