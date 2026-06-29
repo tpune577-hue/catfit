@@ -10,6 +10,7 @@ import { FindingCards } from "@/components/health/finding-badge";
 import { PageHeader } from "@/components/layout/page-header";
 import { StatTile } from "@/components/layout/stat-tile";
 import { Section } from "@/components/layout/section";
+import { DailyStreakDots } from "@/components/workout/daily-streak-dots";
 import { useStoreHydration } from "@/components/providers/store-hydration-gate";
 import { useProfileStore } from "@/stores/profile-store";
 import { useHealthStore } from "@/stores/health-store";
@@ -65,9 +66,7 @@ export default function DashboardPage() {
         }
       />
 
-      <p className="rounded-xl border border-primary/30 bg-secondary px-4 py-3 text-sm leading-relaxed text-foreground/80">
-        แอปนี้ช่วยจัดการไลฟ์สไตล์ ไม่ใช่คำแนะนำทางการแพทย์
-      </p>
+      <DailyStreakDots />
 
       {issues.length > 0 && (
         <Section
@@ -154,6 +153,10 @@ export default function DashboardPage() {
           </Link>
         </div>
       </Section>
+
+      <p className="rounded-xl border border-primary/30 bg-secondary px-4 py-3 text-sm leading-relaxed text-foreground/80">
+        แอปนี้ช่วยจัดการไลฟ์สไตล์ ไม่ใช่คำแนะนำทางการแพทย์
+      </p>
     </div>
   );
 }
