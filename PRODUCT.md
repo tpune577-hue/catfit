@@ -5,4 +5,4 @@ Personal fitness PWA for Thai users — workout planning, nutrition logging, hea
 **Register:** product  
 **Audience:** Adults tracking fitness and health checkups in Thailand  
 **Mood:** Energetic, confident, approachable — not clinical  
-**Brand colors:** Yellow + black (high contrast, active)
+**Brand colors:** Black + red (bold, energetic)
