@@ -148,6 +148,42 @@
   }
 }
 
+@keyframes cat-workout {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-10px) rotate(-2deg);
+  }
+  60% {
+    transform: translateY(-6px) rotate(1.5deg);
+  }
+  80% {
+    transform: translateY(-2px) rotate(-0.5deg);
+  }
+}
+
+@keyframes cat-wobble {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg) scaleX(1);
+  }
+  25% {
+    transform: translateY(-4px) rotate(-1deg) scaleX(1.01);
+  }
+  75% {
+    transform: translateY(-2px) rotate(1deg) scaleX(0.99);
+  }
+}
+
+@layer utilities {
+  .animate-cat-workout {
+    animation: cat-workout var(--cat-anim-speed, 1.4s) ease-in-out infinite;
+  }
+  .animate-cat-wobble {
+    animation: cat-wobble var(--cat-anim-speed, 2s) ease-in-out infinite;
+  }
+}
+
 @keyframes dot-pop {
   0% {
     transform: scale(0);
