@@ -66,6 +66,8 @@ export default function DashboardPage() {
         }
       />
 
+      <DailyStreakDots />
+
       <p className="rounded-xl border border-primary/30 bg-secondary px-4 py-3 text-sm leading-relaxed text-foreground/80">
         แอปนี้ช่วยจัดการไลฟ์สไตล์ ไม่ใช่คำแนะนำทางการแพทย์
       </p>
@@ -111,8 +113,6 @@ export default function DashboardPage() {
           icon={Activity}
         />
       </div>
-
-      <DailyStreakDots />
 
       {todayWorkout && (
         <Section title={`วันนี้ · ${todayWorkout.name}`}>
