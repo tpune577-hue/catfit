@@ -1,10 +1,24 @@
 "use client";
 
 import { Fragment, useMemo } from "react";
-import { Check, X, Flame } from "lucide-react";
+import { Flame } from "lucide-react";
 import { startOfWeek, addDays, isSameDay, isAfter, parseISO, format } from "date-fns";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { cn } from "@/lib/utils";
+
+function CatPaw({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      {/* main pad */}
+      <ellipse cx="12" cy="16" rx="4" ry="3" />
+      {/* toe pads */}
+      <ellipse cx="6.5" cy="10.5" rx="1.8" ry="2.2" transform="rotate(-20 6.5 10.5)" />
+      <ellipse cx="9.5" cy="8.5" rx="1.8" ry="2.2" transform="rotate(-8 9.5 8.5)" />
+      <ellipse cx="14.5" cy="8.5" rx="1.8" ry="2.2" transform="rotate(8 14.5 8.5)" />
+      <ellipse cx="17.5" cy="10.5" rx="1.8" ry="2.2" transform="rotate(20 17.5 10.5)" />
+    </svg>
+  );
+}
 
 const DAY_LABELS = ["จ", "อ", "พ", "พฤ", "ศ", "ส", "อา"];
 
@@ -110,7 +124,7 @@ export function DailyStreakDots() {
               <div className="relative h-0.5 w-3 shrink-0 overflow-hidden rounded-full bg-border">
                 {dot.state === "completed" && (
                   <div
-                    className="absolute inset-0 bg-primary animate-line-fill"
+                    className="absolute inset-0 bg-red-500 animate-line-fill"
                     style={{ animationDelay: `${i * 60 + 45}ms` }}
                   />
                 )}
@@ -127,7 +141,7 @@ function DotIndicator({ state, animDelay }: { state: DotState; animDelay: number
   if (state === "rest") {
     return (
       <div className="flex h-7 w-7 items-center justify-center">
-        <div className="h-2 w-2 rounded-full bg-border" />
+        <div className="h-1.5 w-1.5 rounded-full bg-border" />
       </div>
     );
   }
@@ -135,10 +149,10 @@ function DotIndicator({ state, animDelay }: { state: DotState; animDelay: number
   if (state === "completed") {
     return (
       <div
-        className="flex h-7 w-7 items-center justify-center rounded-full bg-primary animate-dot-pop"
+        className="flex h-7 w-7 items-center justify-center animate-paw-stamp"
         style={{ animationDelay: `${animDelay}ms` }}
       >
-        <Check className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} />
+        <CatPaw className="h-7 w-7 text-red-500" />
       </div>
     );
   }
@@ -146,19 +160,23 @@ function DotIndicator({ state, animDelay }: { state: DotState; animDelay: number
   if (state === "today") {
     return (
       <div className="relative flex h-7 w-7 items-center justify-center">
-        <div className="absolute inset-0 rounded-full border-2 border-primary animate-ping opacity-30" />
-        <div className="h-7 w-7 rounded-full border-2 border-primary bg-primary/10" />
+        <div className="absolute inset-0 rounded-full bg-foreground/15 animate-ping opacity-40" />
+        <CatPaw className="h-7 w-7 text-foreground" />
       </div>
     );
   }
 
   if (state === "skipped") {
     return (
-      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted">
-        <X className="h-3 w-3 text-muted-foreground/70" strokeWidth={2.5} />
+      <div className="flex h-7 w-7 items-center justify-center">
+        <CatPaw className="h-7 w-7 text-muted-foreground/35" />
       </div>
     );
   }
 
-  return <div className="h-7 w-7 rounded-full border-2 border-border/60" />;
+  return (
+    <div className="flex h-7 w-7 items-center justify-center">
+      <CatPaw className="h-7 w-7 text-border" />
+    </div>
+  );
 }
