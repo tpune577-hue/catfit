@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useProfileStore } from "@/stores/profile-store";
 import { useBodyMetricsStore } from "@/stores/body-metrics-store";
 
-type CatStage = "muscular" | "normal" | "chubby" | "fat" | "obese";
+type CatStage = "skinny" | "muscular" | "normal" | "chubby" | "fat" | "obese";
 
 interface StageConfig {
   image: string;
@@ -21,6 +21,15 @@ interface StageConfig {
 }
 
 const STAGE_CONFIG: Record<CatStage, StageConfig> = {
+  skinny: {
+    image: "/cats/cat-skinny.png",
+    label: "แมวผอมกล้ามน้อย 🏋️",
+    badge: "ผอมกล้ามน้อย",
+    message: "ต้องเพิ่มมวลกล้ามเนื้อ กินโปรตีนให้มากขึ้น!",
+    badgeColor: "bg-blue-400",
+    speed: "1.2s",
+    anim: "animate-cat-workout",
+  },
   muscular: {
     image: "/cats/cat-normal.png",
     label: "แมวมีกล้าม 💪",
@@ -69,6 +78,7 @@ const STAGE_CONFIG: Record<CatStage, StageConfig> = {
 };
 
 function getStage(bmi: number, goal: string): CatStage {
+  if (bmi < 18.5) return "skinny";
   if (bmi < 23 && goal === "gain_muscle") return "muscular";
   if (bmi < 23) return "normal";
   if (bmi < 26) return "chubby";
