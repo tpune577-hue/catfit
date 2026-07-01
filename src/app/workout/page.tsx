@@ -9,8 +9,7 @@ import { useWorkoutStore } from "@/stores/workout-store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useStoreHydration } from "@/components/providers/store-hydration-gate";
-
-const DAY_NAMES = ["จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์", "เสาร์", "อาทิตย์"];
+import { WEEKDAY_LABELS_FULL } from "@/lib/weekdays";
 
 export default function WorkoutPage() {
   const router = useRouter();
@@ -46,13 +45,13 @@ export default function WorkoutPage() {
       <DailyStreakDots />
 
       <div className="space-y-3">
-        {weeklyPlan.days.map((day, i) => (
+        {weeklyPlan.days.map((day) => (
           <Link key={day.id} href={`/workout/${day.id}`}>
             <div className="rounded-2xl border border-border/80 bg-card p-4 transition-colors hover:border-primary/30 hover:bg-accent/30">
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-base font-semibold">
-                    {DAY_NAMES[i % 7]} · {day.name}
+                    {WEEKDAY_LABELS_FULL[day.dayIndex]} · {day.name}
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {day.exercises.length} ท่า

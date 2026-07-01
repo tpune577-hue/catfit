@@ -19,6 +19,7 @@ const defaultProfile: Profile = {
   goal: "maintain",
   experience: "beginner",
   daysPerWeek: 4,
+  workoutDays: [0, 1, 2, 3],
   availableEquipment: ["body weight"],
   focusAreas: ["waist", "cardio"],
   healthFocusAreas: [],

@@ -4,6 +4,7 @@ import { Fragment, useMemo } from "react";
 import { Flame } from "lucide-react";
 import { startOfWeek, addDays, isSameDay, isAfter, parseISO, format } from "date-fns";
 import { useWorkoutStore } from "@/stores/workout-store";
+import { WEEKDAY_LABELS_SHORT, todayWeekdayIndex } from "@/lib/weekdays";
 import { cn } from "@/lib/utils";
 
 function CatPaw({ className }: { className?: string }) {
@@ -19,8 +20,6 @@ function CatPaw({ className }: { className?: string }) {
     </svg>
   );
 }
-
-const DAY_LABELS = ["จ", "อ", "พ", "พฤ", "ศ", "ส", "อา"];
 
 type DotState = "completed" | "today" | "skipped" | "upcoming" | "rest";
 
@@ -63,7 +62,7 @@ export function DailyStreakDots() {
   }, [weeklyPlan, sessions, weekStart, today]);
 
   const streak = useMemo(() => {
-    const todayDayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1;
+    const todayDayIndex = todayWeekdayIndex(today);
     let count = 0;
 
     // count today if completed
@@ -117,7 +116,7 @@ export function DailyStreakDots() {
                       : "text-muted-foreground/60"
                 )}
               >
-                {DAY_LABELS[i]}
+                {WEEKDAY_LABELS_SHORT[i]}
               </span>
             </div>
             {i < 6 && (

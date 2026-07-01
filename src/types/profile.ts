@@ -12,6 +12,8 @@ export interface Profile {
   goal: Goal;
   experience: Experience;
   daysPerWeek: number;
+  /** Weekday indices the user works out, 0 = Monday .. 6 = Sunday. */
+  workoutDays: number[];
   targetWeight?: number;
   availableEquipment: string[];
   focusAreas: string[];
