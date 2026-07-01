@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Profile } from "@/types/profile";
+import { defaultWorkoutDays } from "@/lib/weekdays";
 
 interface ProfileState {
   profile: Profile | null;
@@ -40,6 +41,18 @@ export const useProfileStore = create<ProfileState>()(
         })),
       clearProfile: () => set({ profile: null }),
     }),
-    { name: "fitness-profile" }
+    {
+      name: "fitness-profile",
+      merge: (persisted, current) => {
+        const merged = { ...current, ...(persisted as Partial<ProfileState>) };
+        if (merged.profile && !merged.profile.workoutDays?.length) {
+          merged.profile = {
+            ...merged.profile,
+            workoutDays: defaultWorkoutDays(merged.profile.daysPerWeek),
+          };
+        }
+        return merged;
+      },
+    }
   )
 );
