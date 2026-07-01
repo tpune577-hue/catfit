@@ -10,25 +10,13 @@ import { useBodyMetricsStore } from "@/stores/body-metrics-store";
 import { useRouter } from "next/navigation";
 import { PwaStatusCard } from "@/components/layout/pwa-status-card";
 import { WeekdayPicker } from "@/components/workout/weekday-picker";
-import { buildNutritionTargets, buildWeeklyPlan } from "@/lib/plan-builder";
+import { useUpdateWorkoutDays } from "@/hooks/use-update-workout-days";
 
 export default function SettingsPage() {
   const router = useRouter();
   const profile = useProfileStore((s) => s.profile);
-  const updateProfile = useProfileStore((s) => s.updateProfile);
   const clearProfile = useProfileStore((s) => s.clearProfile);
-  const latestAnalysis = useHealthStore((s) => s.latestAnalysis);
-  const setWeeklyPlan = useWorkoutStore((s) => s.setWeeklyPlan);
-  const setTargets = useNutritionStore((s) => s.setTargets);
-  const calorieAdjustment = useNutritionStore((s) => s.calorieAdjustment);
-
-  const handleWorkoutDaysChange = (workoutDays: number[]) => {
-    if (!profile) return;
-    const updated = { ...profile, workoutDays, daysPerWeek: workoutDays.length };
-    updateProfile({ workoutDays, daysPerWeek: workoutDays.length });
-    setWeeklyPlan(buildWeeklyPlan(updated, latestAnalysis));
-    setTargets(buildNutritionTargets(updated, calorieAdjustment));
-  };
+  const updateWorkoutDays = useUpdateWorkoutDays();
 
   const resetAll = () => {
     if (!confirm("ลบข้อมูลทั้งหมดและเริ่มใหม่?")) return;
@@ -69,7 +57,7 @@ export default function SettingsPage() {
             </p>
             <WeekdayPicker
               value={profile.workoutDays}
-              onChange={handleWorkoutDaysChange}
+              onChange={updateWorkoutDays}
               min={1}
               max={7}
             />
