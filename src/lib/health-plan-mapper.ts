@@ -1,6 +1,7 @@
 import type { HealthAnalysis } from "@/types/health";
 import type { Goal, Experience, Profile } from "@/types/profile";
 import { getIdealWeightRange } from "./body-analysis";
+import { normalizeWorkoutDays } from "./weekdays";
 
 export interface PlanSettings {
   goal: Goal;
@@ -91,6 +92,7 @@ export function applyPlanToProfile(
     goal: settings.goal,
     experience: settings.experience,
     daysPerWeek: settings.daysPerWeek,
+    workoutDays: normalizeWorkoutDays(profile.workoutDays, settings.daysPerWeek),
     targetWeight: settings.targetWeight,
     availableEquipment: profile.availableEquipment ?? ["body weight"],
     focusAreas: settings.focusAreas,

@@ -9,11 +9,26 @@ import { useNutritionStore } from "@/stores/nutrition-store";
 import { useBodyMetricsStore } from "@/stores/body-metrics-store";
 import { useRouter } from "next/navigation";
 import { PwaStatusCard } from "@/components/layout/pwa-status-card";
+import { WeekdayPicker } from "@/components/workout/weekday-picker";
+import { buildNutritionTargets, buildWeeklyPlan } from "@/lib/plan-builder";
 
 export default function SettingsPage() {
   const router = useRouter();
   const profile = useProfileStore((s) => s.profile);
+  const updateProfile = useProfileStore((s) => s.updateProfile);
   const clearProfile = useProfileStore((s) => s.clearProfile);
+  const latestAnalysis = useHealthStore((s) => s.latestAnalysis);
+  const setWeeklyPlan = useWorkoutStore((s) => s.setWeeklyPlan);
+  const setTargets = useNutritionStore((s) => s.setTargets);
+  const calorieAdjustment = useNutritionStore((s) => s.calorieAdjustment);
+
+  const handleWorkoutDaysChange = (workoutDays: number[]) => {
+    if (!profile) return;
+    const updated = { ...profile, workoutDays, daysPerWeek: workoutDays.length };
+    updateProfile({ workoutDays, daysPerWeek: workoutDays.length });
+    setWeeklyPlan(buildWeeklyPlan(updated, latestAnalysis));
+    setTargets(buildNutritionTargets(updated, calorieAdjustment));
+  };
 
   const resetAll = () => {
     if (!confirm("ลบข้อมูลทั้งหมดและเริ่มใหม่?")) return;
@@ -38,8 +53,26 @@ export default function SettingsPage() {
           <CardContent className="space-y-1 text-sm">
             <p>เป้าหมาย: {profile.goal === "lose_fat" ? "ลดไขมัน" : profile.goal === "gain_muscle" ? "เพิ่มกล้าม" : "รักษา"}</p>
             <p>ระดับ: {profile.experience}</p>
-            <p>ออกกำลังกาย: {profile.daysPerWeek} วัน/สัปดาห์</p>
             <p>อุปกรณ์: {profile.availableEquipment.join(", ")}</p>
+          </CardContent>
+        </Card>
+      )}
+
+      {profile && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">วันออกกำลังกาย</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              เลือกวันที่สะดวก ({profile.workoutDays.length} วัน/สัปดาห์)
+            </p>
+            <WeekdayPicker
+              value={profile.workoutDays}
+              onChange={handleWorkoutDaysChange}
+              min={1}
+              max={7}
+            />
           </CardContent>
         </Card>
       )}

@@ -8,6 +8,7 @@ import type {
 } from "@/types/workout";
 import type { Goal, Experience } from "@/types/profile";
 import { selectExercises } from "./exercise-filter";
+import { normalizeWorkoutDays } from "./weekdays";
 
 interface DaySplit {
   label: string;
@@ -83,6 +84,7 @@ export function generateWeeklyPlan(
         : ["waist", "cardio"];
 
   const split = pickSplit(profile.daysPerWeek, focusAreas);
+  const workoutDays = normalizeWorkoutDays(profile.workoutDays, profile.daysPerWeek);
   const volume = getVolume(profile.goal, profile.experience);
   const exerciseCount = profile.experience === "beginner" ? 4 : 6;
   const lowFitness = healthAnalysis?.findings.some(
@@ -107,7 +109,7 @@ export function generateWeeklyPlan(
     return {
       id: `day-${index}`,
       name: day.label,
-      dayIndex: index,
+      dayIndex: workoutDays[index],
       focus: day.muscleGroups,
       exercises: workoutExercises,
       cardioBlock: day.includesCardio ? getCardioBlock(cardio) : null,

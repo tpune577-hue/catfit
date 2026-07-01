@@ -19,6 +19,7 @@ import { useHealthStore } from "@/stores/health-store";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { useNutritionStore } from "@/stores/nutrition-store";
 import { sumMeals } from "@/lib/nutrition";
+import { todayWeekdayIndex } from "@/lib/weekdays";
 import { format, startOfWeek, isSameDay, parseISO } from "date-fns";
 
 export default function DashboardPage() {
@@ -34,9 +35,8 @@ export default function DashboardPage() {
   const todayTotals = sumMeals(todayMeals);
 
   // compute today's plan day before any early return so hooks stay in order
-  const todayIndex = new Date().getDay();
-  const planDayIndex = todayIndex === 0 ? 6 : todayIndex - 1;
-  const todayWorkout = weeklyPlan?.days[planDayIndex % (weeklyPlan?.days.length ?? 1)];
+  const planDayIndex = todayWeekdayIndex();
+  const todayWorkout = weeklyPlan?.days.find((d) => d.dayIndex === planDayIndex);
   const todayDone = useTodayWorkoutDone(todayWorkout?.id);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function DashboardPage() {
     const now = new Date();
     const weekStart = startOfWeek(now, { weekStartsOn: 1 });
     let count = 0;
-    const todayDayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
+    const todayDayIdx = todayWeekdayIndex(now);
     for (let i = todayDayIdx; i >= 0; i--) {
       const plan = weeklyPlan.days.find((d) => d.dayIndex === i);
       if (!plan) continue;

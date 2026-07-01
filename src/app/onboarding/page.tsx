@@ -19,13 +19,8 @@ import { buildNutritionTargets, buildWeeklyPlan } from "@/lib/plan-builder";
 import { DEFAULT_EQUIPMENT, FOCUS_AREA_OPTIONS } from "@/types/profile";
 import type { HealthReport } from "@/types/health";
 import { createHealthReportFromParsed } from "@/lib/health-pdf-parser";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { WeekdayPicker } from "@/components/workout/weekday-picker";
+import { defaultWorkoutDays } from "@/lib/weekdays";
 
 const STEPS = [
   "อัปโหลดรายงาน",
@@ -46,8 +41,9 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(0);
   const [report, setReport] = useState<HealthReport | null>(null);
   const [equipment, setEquipment] = useState<string[]>(["body weight"]);
-  const [daysPerWeek, setDaysPerWeek] = useState(4);
+  const [workoutDays, setWorkoutDays] = useState<number[]>(defaultWorkoutDays(4));
   const [skipUpload, setSkipUpload] = useState(false);
+  const daysPerWeek = workoutDays.length;
 
   const analysis = report ? analyzeHealthReport(report) : null;
   const planSettings = analysis && report
@@ -102,6 +98,7 @@ export default function OnboardingPage() {
       ...base,
       availableEquipment: equipment,
       daysPerWeek,
+      workoutDays,
       onboardingComplete: true,
     };
 
@@ -229,22 +226,13 @@ export default function OnboardingPage() {
 
       {step === 4 && (
         <div className="space-y-4">
-          <Label>วันออกกำลังกายต่อสัปดาห์</Label>
-          <Select
-            value={String(daysPerWeek)}
-            onValueChange={(v) => setDaysPerWeek(parseInt(v))}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {[3, 4, 5, 6].map((d) => (
-                <SelectItem key={d} value={String(d)}>
-                  {d} วัน
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div>
+            <Label>วันที่สะดวกออกกำลังกาย</Label>
+            <p className="mt-1 text-xs text-muted-foreground">
+              เลือกได้ 3-6 วัน/สัปดาห์ (เลือกแล้ว {daysPerWeek} วัน)
+            </p>
+          </div>
+          <WeekdayPicker value={workoutDays} onChange={setWorkoutDays} min={3} max={6} />
           <div className="flex flex-wrap gap-2">
             {FOCUS_AREA_OPTIONS.map((f) => (
               <span
