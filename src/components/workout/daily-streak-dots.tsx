@@ -5,6 +5,7 @@ import { Flame } from "lucide-react";
 import { startOfWeek, addDays, isSameDay, isAfter, parseISO, format } from "date-fns";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { WEEKDAY_LABELS_SHORT, todayWeekdayIndex } from "@/lib/weekdays";
+import { WorkoutDaysEditSheet } from "@/components/workout/workout-days-edit-sheet";
 import { cn } from "@/lib/utils";
 
 function CatPaw({ className }: { className?: string }) {
@@ -87,7 +88,10 @@ export function DailyStreakDots() {
     <div className="rounded-2xl border border-border/80 bg-card px-4 py-3">
       <div className="mb-3 flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold">สัปดาห์นี้</p>
+          <div className="flex items-center gap-1">
+            <p className="text-sm font-semibold">สัปดาห์นี้</p>
+            <WorkoutDaysEditSheet />
+          </div>
           <p className="text-xs text-muted-foreground">
             {completedCount} / {totalWorkoutDays} วัน
           </p>
