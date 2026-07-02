@@ -2,12 +2,12 @@
 
 import { useState, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import Image from "next/image";
 import { Check, ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { RestTimer } from "@/components/workout/rest-timer";
 import { ExerciseGuide } from "@/components/workout/exercise-guide";
+import { ExerciseImage } from "@/components/workout/exercise-image";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { useProfileStore } from "@/stores/profile-store";
 import { findAlternativeExercise } from "@/lib/exercise-filter";
@@ -113,12 +113,10 @@ function SessionContent() {
       <h2 className="text-xl font-semibold">{current.exercise.name}</h2>
 
       <div className="relative mx-auto aspect-square max-w-xs overflow-hidden rounded-2xl bg-muted">
-        <Image
+        <ExerciseImage
           src={current.exercise.gifUrl}
           alt={current.exercise.name}
-          fill
           className="object-contain"
-          unoptimized
         />
       </div>
 

@@ -1,5 +1,5 @@
 import type { Exercise } from "@/types/exercise";
-import Image from "next/image";
+import { ExerciseImage } from "@/components/workout/exercise-image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -25,13 +25,7 @@ export function ExerciseCard({
     >
       <CardContent className="flex gap-3 p-3">
         <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-muted">
-          <Image
-            src={exercise.imageUrl}
-            alt={exercise.name}
-            fill
-            className="object-cover"
-            unoptimized
-          />
+          <ExerciseImage src={exercise.imageUrl} alt={exercise.name} />
         </div>
         <div className="min-w-0 flex-1">
           <p className="truncate font-medium text-sm">{exercise.name}</p>
