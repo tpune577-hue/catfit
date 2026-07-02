@@ -27,5 +27,7 @@ export interface Exercise {
   gifUrl: string;
 }
 
-export const EXERCISE_CDN =
-  "https://cdn.jsdelivr.net/gh/hasaneyldrm/exercises-dataset@main";
+// The hasaneyldrm/exercises-dataset repo stopped bundling images/videos
+// (media ownership dispute); media_id (e.g. "2gPfomN" from "0001-2gPfomN.gif")
+// still resolves on ExerciseDB's own CDN.
+export const EXERCISE_CDN = "https://static.exercisedb.dev/media";

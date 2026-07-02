@@ -5,6 +5,10 @@ import thaiStepsById from "@/data/exercise-steps-th.json";
 
 const thaiSteps = thaiStepsById as Record<string, string[]>;
 
+function mediaIdFrom(path: string): string {
+  return path.replace(/^.*\/\d+-/, "").replace(/\.[^.]+$/, "");
+}
+
 export function normalizeExercise(raw: RawExercise): Exercise {
   const instructionSteps =
     raw.instruction_steps?.en ??
@@ -26,8 +30,8 @@ export function normalizeExercise(raw: RawExercise): Exercise {
     instructions,
     instructionSteps,
     instructionStepsTh,
-    imageUrl: `${EXERCISE_CDN}/${raw.image}`,
-    gifUrl: `${EXERCISE_CDN}/${raw.gif_url}`,
+    imageUrl: `${EXERCISE_CDN}/${mediaIdFrom(raw.image)}.gif`,
+    gifUrl: `${EXERCISE_CDN}/${mediaIdFrom(raw.gif_url)}.gif`,
   };
 }
 

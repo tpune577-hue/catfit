@@ -2,11 +2,11 @@
 
 import { use, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowLeft, Play, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExerciseGuide } from "@/components/workout/exercise-guide";
+import { ExerciseImage } from "@/components/workout/exercise-image";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { useProfileStore } from "@/stores/profile-store";
 import { findAlternativeExercise } from "@/lib/exercise-filter";
@@ -92,13 +92,7 @@ export default function WorkoutDayPage({
           >
             <div className="flex gap-3">
               <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-muted">
-                <Image
-                  src={we.exercise.imageUrl}
-                  alt={we.exercise.name}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
+                <ExerciseImage src={we.exercise.imageUrl} alt={we.exercise.name} />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs text-muted-foreground">ท่าที่ {i + 1}</p>
