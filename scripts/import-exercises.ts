@@ -1,13 +1,15 @@
 #!/usr/bin/env npx tsx
 /**
- * Download and normalize exercises from hasaneyldrm/exercises-dataset
+ * Download exercises from yuhonas/free-exercise-db. Images ship inside that
+ * repo (served via jsDelivr's GitHub CDN), which is why this dataset was
+ * chosen over hasaneyldrm/exercises-dataset — that one's media host went away.
  * Usage: npx tsx scripts/import-exercises.ts
  */
 import { writeFileSync, mkdirSync } from "fs";
 import { join } from "path";
 
 const URL =
-  "https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/data/exercises.json";
+  "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json";
 const OUT = join(process.cwd(), "src/data/exercises.json");
 
 async function main() {

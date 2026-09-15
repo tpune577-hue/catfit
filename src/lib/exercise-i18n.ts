@@ -1,4 +1,4 @@
-import type { Exercise, RawExercise } from "@/types/exercise";
+import type { Exercise } from "@/types/exercise";
 import { getThaiInstructionSteps } from "@/lib/exercise-steps-th";
 import {
   translateMuscle,
@@ -92,14 +92,4 @@ export function getExerciseGuide(exercise: Exercise): ExerciseGuide {
     focusTip: focus.tip,
     steps: steps.length > 0 ? steps : [`1. ทำท่า${exercise.name} ช้า ๆ โฟกัสที่${focus.area}`],
   };
-}
-
-export function normalizeExerciseWithSteps(raw: RawExercise) {
-  const instructionSteps =
-    raw.instruction_steps?.en ??
-    (raw.instructions?.en
-      ? raw.instructions.en.split(/(?<=[.!])\s+/).filter((s) => s.length > 10)
-      : []);
-
-  return instructionSteps;
 }

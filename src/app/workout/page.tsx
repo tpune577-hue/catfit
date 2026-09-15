@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronRight, Library } from "lucide-react";
+import { ChevronRight, Library, ImagePlus } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { DailyStreakDots } from "@/components/workout/daily-streak-dots";
@@ -33,12 +33,20 @@ export default function WorkoutPage() {
         title="แผนรายสัปดาห์"
         description="ตารางออกกำลังกายที่ปรับตามเป้าหมายของคุณ"
         action={
-          <Link href="/exercises">
-            <Button variant="outline" size="sm" className="gap-1.5">
-              <Library className="h-4 w-4" />
-              คลังท่า
-            </Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link href="/workout/log">
+              <Button variant="outline" size="sm" className="gap-1.5">
+                <ImagePlus className="h-4 w-4" />
+                บันทึกผล
+              </Button>
+            </Link>
+            <Link href="/exercises">
+              <Button variant="outline" size="sm" className="gap-1.5">
+                <Library className="h-4 w-4" />
+                คลังท่า
+              </Button>
+            </Link>
+          </div>
         }
       />
 

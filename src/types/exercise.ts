@@ -1,16 +1,15 @@
 export interface RawExercise {
   id: string;
   name: string;
+  force: string | null;
+  level: string;
+  mechanic: string | null;
+  equipment: string | null;
+  primaryMuscles: string[];
+  secondaryMuscles: string[];
+  instructions: string[];
   category: string;
-  body_part: string;
-  equipment: string;
-  instructions: { en?: string; tr?: string };
-  instruction_steps?: { en?: string[] };
-  muscle_group?: string;
-  secondary_muscles?: string[];
-  target: string;
-  image: string;
-  gif_url: string;
+  images: string[];
 }
 
 export interface Exercise {
@@ -27,7 +26,9 @@ export interface Exercise {
   gifUrl: string;
 }
 
-// The hasaneyldrm/exercises-dataset repo stopped bundling images/videos
-// (media ownership dispute); media_id (e.g. "2gPfomN" from "0001-2gPfomN.gif")
-// still resolves on ExerciseDB's own CDN.
-export const EXERCISE_CDN = "https://static.exercisedb.dev/media";
+// free-exercise-db (yuhonas/free-exercise-db) commits exercise photos directly
+// into the repo, so jsDelivr's GitHub-file CDN mirrors them reliably — unlike
+// the old hasaneyldrm/exercises-dataset, which depended on a third-party media
+// host that stopped serving files.
+export const EXERCISE_CDN =
+  "https://cdn.jsdelivr.net/gh/yuhonas/free-exercise-db@main/exercises";

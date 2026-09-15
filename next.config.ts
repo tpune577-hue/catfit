@@ -7,8 +7,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "static.exercisedb.dev",
-        pathname: "/media/**",
+        hostname: "cdn.jsdelivr.net",
+        pathname: "/gh/yuhonas/free-exercise-db@main/exercises/**",
       },
     ],
   },
