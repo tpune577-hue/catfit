@@ -117,7 +117,7 @@ function SessionContent() {
 
       <h2 className="text-xl font-semibold">{current.exercise.name}</h2>
 
-      <div className="relative mx-auto aspect-square max-w-xs overflow-hidden rounded-2xl bg-muted">
+      <div className="relative mx-auto aspect-square w-full overflow-hidden rounded-2xl bg-muted">
         <ExerciseImage
           src={current.exercise.gifUrl}
           alt={current.exercise.name}
