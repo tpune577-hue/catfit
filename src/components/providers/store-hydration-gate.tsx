@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useProfileStore } from "@/stores/profile-store";
 import { useHealthStore } from "@/stores/health-store";
 import { useWorkoutStore } from "@/stores/workout-store";
+import { useWorkoutLogStore } from "@/stores/workout-log-store";
 import { useNutritionStore } from "@/stores/nutrition-store";
 import { useBodyMetricsStore } from "@/stores/body-metrics-store";
 
@@ -11,6 +12,7 @@ const persistedStores = [
   useProfileStore,
   useHealthStore,
   useWorkoutStore,
+  useWorkoutLogStore,
   useNutritionStore,
   useBodyMetricsStore,
 ] as const;

@@ -5,33 +5,96 @@ import thaiStepsById from "@/data/exercise-steps-th.json";
 
 const thaiSteps = thaiStepsById as Record<string, string[]>;
 
-function mediaIdFrom(path: string): string {
-  return path.replace(/^.*\/\d+-/, "").replace(/\.[^.]+$/, "");
+/** free-exercise-db primaryMuscles -> the body-part buckets used by
+ * FOCUS_AREA_OPTIONS / the weekly-plan split generator. */
+const MUSCLE_TO_BODY_PART: Record<string, string> = {
+  abdominals: "waist",
+  "lower back": "waist",
+  chest: "chest",
+  lats: "back",
+  "middle back": "back",
+  traps: "back",
+  shoulders: "shoulders",
+  biceps: "upper arms",
+  triceps: "upper arms",
+  forearms: "upper arms",
+  quadriceps: "upper legs",
+  hamstrings: "upper legs",
+  glutes: "upper legs",
+  adductors: "upper legs",
+  abductors: "upper legs",
+  calves: "lower legs",
+  neck: "neck",
+};
+
+/** free-exercise-db primaryMuscles -> the muscle keys used by
+ * MUSCLE_TH / TARGET_FOCUS (kept aligned with the old dataset's vocabulary). */
+const MUSCLE_TO_TARGET: Record<string, string> = {
+  abdominals: "abs",
+  chest: "pectorals",
+  shoulders: "deltoids",
+  lats: "lats",
+  "middle back": "upper back",
+  traps: "traps",
+  biceps: "biceps",
+  triceps: "triceps",
+  forearms: "forearms",
+  quadriceps: "quadriceps",
+  hamstrings: "hamstrings",
+  glutes: "glutes",
+  adductors: "adductors",
+  abductors: "abductors",
+  calves: "calves",
+  "lower back": "lower back",
+  neck: "neck",
+};
+
+const EQUIPMENT_ALIAS: Record<string, string> = {
+  "body only": "body weight",
+  kettlebells: "kettlebell",
+  bands: "resistance band",
+  "e-z curl bar": "ez barbell",
+  "exercise ball": "stability ball",
+};
+
+function normalizeEquipment(raw: string | null): string {
+  if (!raw) return "body weight";
+  return EQUIPMENT_ALIAS[raw] ?? raw;
+}
+
+function imageUrl(images: string[], index: number): string {
+  const path = images[index] ?? images[0];
+  return path ? `${EXERCISE_CDN}/${path}` : "";
 }
 
 export function normalizeExercise(raw: RawExercise): Exercise {
-  const instructionSteps =
-    raw.instruction_steps?.en ??
-    (raw.instructions?.en
-      ? raw.instructions.en.split(/(?<=[.!])\s+/).filter((s) => s.length > 10)
-      : []);
-  const instructions =
-    instructionSteps.join(" ") ||
-    raw.instructions?.en ||
-    "";
+  const instructionSteps = (raw.instructions ?? []).filter(Boolean);
+  const instructions = instructionSteps.join(" ");
   const instructionStepsTh = thaiSteps[raw.id] ?? [];
+
+  const primaryMuscle = raw.primaryMuscles?.[0] ?? "";
+  const isCardio = raw.category === "cardio";
+  const category = isCardio
+    ? "cardio"
+    : MUSCLE_TO_BODY_PART[primaryMuscle] ?? "waist";
+  const target = isCardio
+    ? "cardiovascular system"
+    : MUSCLE_TO_TARGET[primaryMuscle] ?? primaryMuscle;
+
   return {
     id: raw.id,
     name: raw.name,
-    category: raw.category || raw.body_part,
-    target: raw.target,
-    equipment: raw.equipment,
-    secondaryMuscles: raw.secondary_muscles ?? [],
+    category,
+    target,
+    equipment: normalizeEquipment(raw.equipment),
+    secondaryMuscles: (raw.secondaryMuscles ?? []).map(
+      (m) => MUSCLE_TO_TARGET[m] ?? m
+    ),
     instructions,
     instructionSteps,
     instructionStepsTh,
-    imageUrl: `${EXERCISE_CDN}/${mediaIdFrom(raw.image)}.gif`,
-    gifUrl: `${EXERCISE_CDN}/${mediaIdFrom(raw.gif_url)}.gif`,
+    imageUrl: imageUrl(raw.images, 0),
+    gifUrl: imageUrl(raw.images, 1),
   };
 }
 
@@ -39,7 +102,9 @@ let _cache: Exercise[] | null = null;
 
 export function getAllExercises(): Exercise[] {
   if (!_cache) {
-    _cache = (rawExercises as RawExercise[]).map(normalizeExercise);
+    _cache = (rawExercises as RawExercise[])
+      .filter((raw) => raw.images?.length > 0)
+      .map(normalizeExercise);
   }
   return _cache;
 }

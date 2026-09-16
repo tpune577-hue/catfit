@@ -6,6 +6,8 @@ import { Check, ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { RestTimer } from "@/components/workout/rest-timer";
+import { ExerciseTimer } from "@/components/workout/exercise-timer";
+import { RepCounter } from "@/components/workout/rep-counter";
 import { ExerciseGuide } from "@/components/workout/exercise-guide";
 import { ExerciseImage } from "@/components/workout/exercise-image";
 import { useWorkoutStore } from "@/stores/workout-store";
@@ -26,6 +28,7 @@ function SessionContent() {
   const day = weeklyPlan?.days.find((d) => d.id === dayId);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedSets, setCompletedSets] = useState<Record<string, number>>({});
+  const [reps, setReps] = useState(0);
   const [showRest, setShowRest] = useState(false);
   const [swapMessage, setSwapMessage] = useState<string | null>(null);
   const [sessionId] = useState(() => crypto.randomUUID());
@@ -39,6 +42,7 @@ function SessionContent() {
     if (!current) return;
     const newCount = setsDone + 1;
     setCompletedSets((prev) => ({ ...prev, [exerciseId]: newCount }));
+    setReps(0);
     if (newCount < totalSets) {
       setShowRest(true);
     } else if (day && currentIndex < day.exercises.length - 1) {
@@ -68,6 +72,7 @@ function SessionContent() {
       delete next[exerciseId];
       return next;
     });
+    setReps(0);
     setShowRest(false);
     setSwapMessage(
       `เปลี่ยนเป็น ${alternative.name} (${translateEquipment(alternative.equipment)})`
@@ -82,7 +87,7 @@ function SessionContent() {
       completedExercises: Object.keys(completedSets),
     });
     completeSession(sessionId);
-    router.push("/workout");
+    router.push("/workout/log");
   };
 
   if (!day || !current) {
@@ -121,6 +126,10 @@ function SessionContent() {
       </div>
 
       <ExerciseGuide exercise={current.exercise} />
+
+      <ExerciseTimer key={`${exerciseId}-${setsDone}`} />
+
+      <RepCounter reps={reps} targetLabel={`${current.reps} ครั้ง`} onChange={setReps} />
 
       {swapMessage && (
         <p className="rounded-xl bg-primary/10 px-4 py-2 text-sm text-primary">

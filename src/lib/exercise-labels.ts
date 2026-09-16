@@ -22,6 +22,7 @@ export const MUSCLE_TH: Record<string, string> = {
   "serratus anterior": "กล้ามข้างลำตัว",
   adductors: "กล้ามขาด้านใน",
   abductors: "กล้ามขาด้านนอก",
+  neck: "คอ",
   "soleus": "น่อง",
   "levator scapulae": "กล้ามคอ-สะบัก",
 };
@@ -49,6 +50,8 @@ export const EQUIPMENT_TH: Record<string, string> = {
   kettlebell: "เคตเทิลเบล",
   "medicine ball": "บอลออกกำลังกาย",
   "stability ball": "บอลโยคะ",
+  "foam roll": "โฟมโรลเลอร์",
+  other: "อุปกรณ์อื่น",
   "bosu ball": "บอลโบซุ",
   "ez barbell": "บาร์เบล EZ",
   rope: "เชือก",
