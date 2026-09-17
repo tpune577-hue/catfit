@@ -9,7 +9,7 @@ import { RestTimer } from "@/components/workout/rest-timer";
 import { ExerciseTimer } from "@/components/workout/exercise-timer";
 import { RepCounter } from "@/components/workout/rep-counter";
 import { ExerciseGuide } from "@/components/workout/exercise-guide";
-import { ExerciseImage } from "@/components/workout/exercise-image";
+import { ExerciseAnimation } from "@/components/workout/exercise-animation";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { useProfileStore } from "@/stores/profile-store";
 import { findAlternativeExercise } from "@/lib/exercise-filter";
@@ -120,8 +120,8 @@ function SessionContent() {
       {/* Full-bleed past the page gutter; 3:2 matches the source photos, so the
           frame fills edge to edge instead of letterboxing inside a square. */}
       <div className="relative -mx-4 aspect-[3/2] overflow-hidden bg-muted sm:-mx-5 sm:rounded-2xl">
-        <ExerciseImage
-          src={current.exercise.gifUrl}
+        <ExerciseAnimation
+          frames={[current.exercise.imageUrl, current.exercise.gifUrl]}
           alt={current.exercise.name}
         />
       </div>
