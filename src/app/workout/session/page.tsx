@@ -117,11 +117,12 @@ function SessionContent() {
 
       <h2 className="text-xl font-semibold">{current.exercise.name}</h2>
 
-      <div className="relative mx-auto aspect-square max-w-xs overflow-hidden rounded-2xl bg-muted">
+      {/* Full-bleed past the page gutter; 3:2 matches the source photos, so the
+          frame fills edge to edge instead of letterboxing inside a square. */}
+      <div className="relative -mx-4 aspect-[3/2] overflow-hidden bg-muted sm:-mx-5 sm:rounded-2xl">
         <ExerciseImage
           src={current.exercise.gifUrl}
           alt={current.exercise.name}
-          className="object-contain"
         />
       </div>
 
