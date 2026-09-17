@@ -6,6 +6,7 @@ import { ArrowLeft, Play, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExerciseGuide } from "@/components/workout/exercise-guide";
+import { ExerciseAnimation } from "@/components/workout/exercise-animation";
 import { ExerciseImage } from "@/components/workout/exercise-image";
 import { useWorkoutStore } from "@/stores/workout-store";
 import { useProfileStore } from "@/stores/profile-store";
@@ -122,8 +123,8 @@ export default function WorkoutDayPage({
                   {/* shrink-0: the sheet is a flex column, which would otherwise
                       squash the frame and crop the photo further. */}
                   <div className="relative aspect-[3/2] w-full shrink-0 overflow-hidden bg-muted">
-                    <ExerciseImage
-                      src={we.exercise.imageUrl}
+                    <ExerciseAnimation
+                      frames={[we.exercise.imageUrl, we.exercise.gifUrl]}
                       alt={we.exercise.name}
                     />
                   </div>
