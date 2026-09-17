@@ -119,9 +119,15 @@ export default function WorkoutDayPage({
                   <SheetHeader>
                     <SheetTitle>{we.exercise.name}</SheetTitle>
                   </SheetHeader>
-                  <div className="mt-4">
-                    <ExerciseGuide exercise={we.exercise} />
+                  {/* shrink-0: the sheet is a flex column, which would otherwise
+                      squash the frame and crop the photo further. */}
+                  <div className="relative aspect-[3/2] w-full shrink-0 overflow-hidden bg-muted">
+                    <ExerciseImage
+                      src={we.exercise.imageUrl}
+                      alt={we.exercise.name}
+                    />
                   </div>
+                  <ExerciseGuide exercise={we.exercise} />
                 </SheetContent>
               </Sheet>
               <Button
